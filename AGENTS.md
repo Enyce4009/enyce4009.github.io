@@ -14,18 +14,25 @@ The owner is learning to code, so keep changes simple and easy to read.
 | --- | --- |
 | `index.html` | The homepage: intro, "What I'm working on", Projects cards, footer |
 | `404.html` | Page GitHub Pages shows for missing URLs |
-| `style.css` | The only stylesheet, shared by every page |
-| `README.md` | How to preview and publish |
+| `style.css` | Entry point every page links to; only `@import`s the files below, in order |
+| `css/tokens.css` | Color variables, light and dark mode. Must be imported first |
+| `css/base.css` | Reset, page layout, headings, links, footer |
+| `css/components.css` | Reusable pieces: `.eyebrow`, `.lead`, `.cards`, `.card` |
+| `README.md` | How to preview and publish, and the stylesheet layout |
+
+Pages link only `style.css`. Put new CSS in whichever `css/` file fits, not in `style.css`,
+and add a new file to `css/` (plus an `@import` in `style.css`) only when none of them fits.
 
 ## Previewing
 
 Open `index.html` in a browser. There are no tests or linters; check changes by looking at the page:
 
 - at desktop width and at phone width (about 375px), with no sideways scrolling
-- in both light and dark mode (`style.css` switches on `prefers-color-scheme`)
+- in both light and dark mode (`css/tokens.css` switches on `prefers-color-scheme`)
 
 `404.html` links `/style.css` with a leading slash so it works at any URL on the live site.
-Opened straight from disk it shows unstyled; that's expected.
+Opened straight from disk it shows unstyled; that's expected. The `@import` paths in `style.css`
+are relative to `style.css` itself, so they work from either page; keep them relative.
 
 ## Publishing
 
@@ -38,10 +45,11 @@ Every change goes through a pull request. Never commit or push directly to `main
 ## Rules
 
 - **No build tools or dependencies.** Don't add npm, frameworks, bundlers or CDN scripts unless the owner asks.
-- **Colors come from the variables** at the top of `style.css` (`--bg`, `--surface`, `--text`, `--muted`,
+- **Colors come from the variables** in `css/tokens.css` (`--bg`, `--surface`, `--text`, `--muted`,
   `--border`, `--accent`). When adding a color, add a variable for it in both the light `:root` block
   and the dark-mode block. Don't hard-code colors in rules.
-- **Reuse existing classes** (`eyebrow`, `lead`, `cards`, `card`) before adding new ones.
+- **Reuse existing classes** in `css/components.css` (`eyebrow`, `lead`, `cards`, `card`) before adding new ones.
+  New reusable classes go there too; page-wide element styles go in `css/base.css`.
 - **New pages** copy the `<head>` of `index.html` (charset, viewport, title, description, stylesheet link)
   and wrap content in `<main>`, so they get the same width and padding.
 - **Projects** are `<li class="card">` items in the `.cards` list, each with an `<h3>` and a short `<p>`.
